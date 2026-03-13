@@ -1,4 +1,4 @@
-#!_INTERPRETERPYTHON_PATH_
+#!/usr/bin/env python
 
 import os, re, subprocess, sys, argparse, shutil, random, gc
 from Bio import SeqIO
@@ -37,8 +37,8 @@ class Structure_search:
         with open(rnabobopt, 'r') as F:
             for line in F:
                 line = line.strip()
-                if re.match('\d', line):
-                    splitline = re.split('\s+', line)[:3]
+                if re.match(r'\d', line):
+                    splitline = re.split(r'\s+', line)[:3]
                     chrid = splitline[2]
                     ## To avoid rnabob bugs
                     if int(splitline[1]) < 0:
@@ -127,7 +127,7 @@ class Structure_search:
                     id = splitlines[8].replace('ID=', '')
                     t = 1
                 elif splitlines[2] == 'terminal_inverted_repeat_element':
-                    sim = re.findall('tir_similarity=(\d+\.\d+)', splitlines[8])[0]
+                    sim = re.findall(r'tir_similarity=(\d+\.\d+)', splitlines[8])[0]
                 elif splitlines[2] == 'terminal_inverted_repeat':
                     if t == 1:
                         left_start = str(int(splitlines[3]) + self.START)
@@ -299,11 +299,11 @@ class Homologous_search:
             for line in F:
                 if line.startswith('#'):
                     continue
-                splitlines = re.split('\s+', line.rstrip())
+                splitlines = re.split(r'\s+', line.rstrip())
                 domain, sub_class = splitlines[3].split('_')
                 subchrname = "_".join(splitlines[0].split('_')[:-1])
                 chrm_name, START = subchrname.split('startat')
-                start, end = re.findall('\[(\d+)\s+-\s+(\d+)\]', line)[0]
+                start, end = re.findall(r'\[(\d+)\s+-\s+(\d+)\]', line)[0]
                 start = str(int(start) + int(START))
                 end = str(int(end) + int(START))
 
@@ -1888,12 +1888,12 @@ if __name__ == "__main__":
         sys.stderr.write("Error: Parameter value should not be negative.\n")
         exit(0)
     ## To set and check dependency file path
-    HMMFILE = '_HMM_'
-    HEADERFILE = '_HEADER_'
-    FISHER_PRO = '_FISHER_'
-    BOUNDARY_PRO = '_BOUNDARY_'
-    SPLIT_JOINT_PRO = '_SPLIT_JOINT_'
-    SORT_PRO = '_SORTPRO_'
+    HMMFILE = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/RepHel.hmm'
+    HEADERFILE = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/tclcv.txt'
+    FISHER_PRO = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/heliano_fisher.R'
+    BOUNDARY_PRO = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/heliano_bcheck.R'
+    SPLIT_JOINT_PRO = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/SplitJoint.R'
+    SORT_PRO = '/data/toby/miniforge3/envs/test_013/share/heliano-1.3.1-0/Sort.sh'
     try:
         BEDTOOLS_PATH = subprocess.check_output("which bedtools", shell=True).decode().rstrip()
         BEDTOOLS_PATH = '/'.join(BEDTOOLS_PATH.split('/')[:-1])
